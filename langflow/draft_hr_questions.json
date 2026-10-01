@@ -4280,7 +4280,7 @@
                     "display_name": "Send Draft",
                     "name": "gmail_send_draft",
                     "readonly": true,
-                    "status": true,
+                    "status": false,
                     "tags": [
                       "GMAIL_SEND_DRAFT"
                     ]
@@ -4366,7 +4366,7 @@
                     "display_name": "Send Email",
                     "name": "gmail_send_email",
                     "readonly": true,
-                    "status": true,
+                    "status": false,
                     "tags": [
                       "GMAIL_SEND_EMAIL"
                     ]
