@@ -115,6 +115,7 @@ CekPKWT:
 Semua flow ada di folder `langflow/` dan dapat diimpor langsung ke Langflow.
 
 ### 1. `check_work_contract`
+![Flow check_work_contract di Langflow](docs/screenshots/langflow-workflow.png)
 
 ```
 Chat Input → PII Redactor ─┬─► Astra DB (pasal relevan, top-4) ─► Parser ─┐
@@ -157,6 +158,8 @@ Chat Input ─► Agent (+ Composio Gmail sebagai tool) ─► Chat Output
   - Jika tidak, teks email ditampilkan untuk disalin.
 - **Output:** status ("Draf dibuat di Gmail (belum terkirim)" atau "Teks email siap disalin"), subjek dan isi email, serta pengingat untuk meninjau sebelum mengirim.
 - **Agent tidak bisa mengirim email.** Di komponen Gmail hanya dua aksi yang aktif: **Create Email Draft** dan **List Drafts**. Aksi kirim (Send Email, Send Draft) dan semua aksi lain dimatikan, sehingga pembatasnya bersifat teknis, bukan hanya instruksi prompt. Prompt Agent juga mengabaikan instruksi di dalam input yang meminta mengirim atau menghapus email.
+
+![Isi draf email HR di IBM Bob](docs/screenshots/bob-hr-draft.png)
 
 ### 4. `ingest_labor_corpus` (internal, tidak diekspos ke Bob)
 
@@ -277,28 +280,15 @@ Bob mengirim teks pengguna ke Chat Input setiap flow dan menerima Chat Output se
 | "Katanya kontrak PKWT boleh pakai masa percobaan 3 bulan, bener kan?" | `answer_labor_rule_question` |
 | "Bantu buatkan email ke HR (hr@perusahaan.co.id) soal temuan tadi" | `draft_hr_questions` |
 
-Contoh format laporan `check_work_contract` (ilustrasi):
+### Hasil nyata di IBM Bob
 
-```markdown
-**Ringkasan:** Ditemukan 2 potensi masalah (1 tinggi, 0 sedang, 1 rendah). Rezim aturan: UU 13/2003
-sebagaimana diubah UU 6/2023, PP 35/2021, dan Putusan MK 168/PUU-XXI/2023 (rezim "current").
+**Pemeriksaan kontrak:** Bob memanggil `check_work_contract` dan menampilkan 8 potensi masalah.
 
-**Potensi masalah**
-### 1. Masa percobaan pada PKWT
-- **Isi kontrak:** "Karyawan menjalani masa percobaan selama 3 bulan."
-- **Potensi masalah:** PKWT tidak dapat mensyaratkan masa percobaan; jika disyaratkan, masa
-  percobaan itu batal demi hukum dan masa kerja tetap dihitung.
-- **Rujukan:** PP 35/2021 Pasal 12, status: berlaku
-- **Keparahan:** tinggi · **Keyakinan:** tinggi
-- **Pertanyaan untuk HR:** Apakah ketentuan masa percobaan ini dapat ditinjau ulang, mengingat
-  kontrak ini berbentuk PKWT?
+![Hasil check_work_contract di IBM Bob](docs/screenshots/bob-check-contract.png)
 
-**Klausul tanpa masalah yang ditemukan:** …
-**Tidak dapat diperiksa:** …
+**Tanya aturan dan permintaan draf email:** Bob memanggil `answer_labor_rule_question` untuk UMK Karawang, lalu `draft_hr_questions`.
 
----
-*Ini bukan nasihat hukum. …*
-```
+![Tanya UMK dan permintaan draf email di IBM Bob](docs/screenshots/bob-rule-question.png)
 
 ## Hasil evaluasi
 
@@ -320,6 +310,7 @@ sebagaimana diubah UU 6/2023, PP 35/2021, dan Putusan MK 168/PUU-XXI/2023 (rezim
 - **Tahan prompt injection:** teks kontrak diperlakukan sebagai data, bukan instruksi. Teks yang mencoba memberi perintah ke AI dilaporkan di bagian "Catatan".
 - **Bahasa yang tidak menghakimi:** sistem memakai "mungkin bertentangan dengan" atau "perlu dikonfirmasi", tidak pernah "ilegal" atau "melanggar hukum".
 - **Kendali di tangan pengguna:** agent hanya bisa membuat draf email. Aksi kirim Gmail dimatikan di level komponen, jadi agent secara teknis tidak dapat mengirim email. Pengguna meninjau, mengedit, dan mengirim sendiri.
+![Draf tersimpan di Gmail dan belum terkirim](docs/screenshots/gmail-draft.png)
 - **Bukan nasihat hukum:** setiap laporan ditutup dengan disclaimer dan rujukan ke LBH atau Disnaker.
 - **Kredensial aman:** semua key disimpan sebagai Global Variables Langflow, tidak di file flow.
 
