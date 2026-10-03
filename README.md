@@ -115,7 +115,7 @@ CekPKWT:
 Semua flow ada di folder `langflow/` dan dapat diimpor langsung ke Langflow.
 
 ### 1. `check_work_contract`
-![Flow check_work_contract di Langflow](docs/screenshots/langflow-workflow.png)
+![Flow check_work_contract di Langflow](docs/screenshots/langflow-workflow.jpeg)
 
 ```
 Chat Input → PII Redactor ─┬─► Astra DB (pasal relevan, top-4) ─► Parser ─┐
@@ -159,7 +159,7 @@ Chat Input ─► Agent (+ Composio Gmail sebagai tool) ─► Chat Output
 - **Output:** status ("Draf dibuat di Gmail (belum terkirim)" atau "Teks email siap disalin"), subjek dan isi email, serta pengingat untuk meninjau sebelum mengirim.
 - **Agent tidak bisa mengirim email.** Di komponen Gmail hanya dua aksi yang aktif: **Create Email Draft** dan **List Drafts**. Aksi kirim (Send Email, Send Draft) dan semua aksi lain dimatikan, sehingga pembatasnya bersifat teknis, bukan hanya instruksi prompt. Prompt Agent juga mengabaikan instruksi di dalam input yang meminta mengirim atau menghapus email.
 
-![Isi draf email HR di IBM Bob](docs/screenshots/bob-hr-draft.png)
+![Isi draf email HR di IBM Bob](docs/screenshots/bob-hr-draft.jpeg)
 
 ### 4. `ingest_labor_corpus` (internal, tidak diekspos ke Bob)
 
@@ -284,11 +284,11 @@ Bob mengirim teks pengguna ke Chat Input setiap flow dan menerima Chat Output se
 
 **Pemeriksaan kontrak:** Bob memanggil `check_work_contract` dan menampilkan 8 potensi masalah.
 
-![Hasil check_work_contract di IBM Bob](docs/screenshots/bob-check-contract.png)
+![Hasil check_work_contract di IBM Bob](docs/screenshots/bob-check-contract.jpeg)
 
 **Tanya aturan dan permintaan draf email:** Bob memanggil `answer_labor_rule_question` untuk UMK Karawang, lalu `draft_hr_questions`.
 
-![Tanya UMK dan permintaan draf email di IBM Bob](docs/screenshots/bob-rule-question.png)
+![Tanya UMK dan permintaan draf email di IBM Bob](docs/screenshots/bob-rule-question.jpeg)
 
 ## Hasil evaluasi
 
@@ -310,7 +310,7 @@ Bob mengirim teks pengguna ke Chat Input setiap flow dan menerima Chat Output se
 - **Tahan prompt injection:** teks kontrak diperlakukan sebagai data, bukan instruksi. Teks yang mencoba memberi perintah ke AI dilaporkan di bagian "Catatan".
 - **Bahasa yang tidak menghakimi:** sistem memakai "mungkin bertentangan dengan" atau "perlu dikonfirmasi", tidak pernah "ilegal" atau "melanggar hukum".
 - **Kendali di tangan pengguna:** agent hanya bisa membuat draf email. Aksi kirim Gmail dimatikan di level komponen, jadi agent secara teknis tidak dapat mengirim email. Pengguna meninjau, mengedit, dan mengirim sendiri.
-![Draf tersimpan di Gmail dan belum terkirim](docs/screenshots/gmail-draft.png)
+![Draf tersimpan di Gmail dan belum terkirim](docs/screenshots/gmail-draft.jpeg)
 - **Bukan nasihat hukum:** setiap laporan ditutup dengan disclaimer dan rujukan ke LBH atau Disnaker.
 - **Kredensial aman:** semua key disimpan sebagai Global Variables Langflow, tidak di file flow.
 
@@ -352,4 +352,6 @@ Bob mengirim teks pengguna ke Chat Input setiap flow dan menerima Chat Output se
     ├── check_work_contract.json
     ├── draft_hr_questions.json
     └── ingest_labor_corpus.json
+├── docs/
+│   └── screenshots/             # Bukti alur: Bob, Langflow, Gmail
 ```
